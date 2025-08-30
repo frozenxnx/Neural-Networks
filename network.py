@@ -53,24 +53,24 @@ class NeuralNetwork:
          """
          
         """
-         learing_rate = 0.1
+         learn_rate = 0.1
          epochs = 1000
 
          for epoch in range(epochs):
-             for x,y,_true in zip(data,all_y_trues):
+             for x,y_true in zip(data,all_y_trues):
                   
                  
                   sum_h1 = self.w1*x[0] + self.w2*x[1] + self.b1
                   h1 = sigmoid(sum_h1)
                   sum_h2 = self.w3*x[0] + self.w4*x[1] +self.b2
                   h2 = sigmoid(sum_h2)
-                  sum_o1 = sum_h1*x[0] + sum_h2*x[1] + self.b3
+                  sum_o1 = h1*self.w5 + h2*self.w6 + self.b3
                   o1 = sigmoid(sum_o1)
                   y_pred = o1
 
 
                   #calculating partial derivatives
-                  d_L_d_y = -2*(y_true-y_pred)
+                  d_L_d_ypred = -2*(y_true-y_pred)
 
 
                   #Neuron o1
@@ -119,11 +119,11 @@ class NeuralNetwork:
 
 
 #Define dataset        
-data = np.array(
-        [-2,-1]
-        [25,6]
-        [17,4]
-        [-15,-6])
+data = np.array([
+        [-2,-1],
+        [25,6],
+        [17,4],
+        [-15,-6],])
 
 all_y_trues = np.array(
     [1,
@@ -137,7 +137,11 @@ network = NeuralNetwork()
 network.train(data,all_y_trues)
 
 
-
+# Make some predictions
+emily = np.array([-7, -3]) # 128 pounds, 63 inches
+frank = np.array([20, 2])  # 155 pounds, 68 inches
+print("Emily: %.3f" % network.feedforward(emily)) # 0.951 - F
+print("Frank: %.3f" % network.feedforward(frank)) # 0.039 - M
 
 
 
